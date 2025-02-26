@@ -8,42 +8,51 @@ export default function TherapistManagement() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   useEffect(() => {
-    axios.get("/api/skin-therapists")
-      .then((res) => setTherapists(res.data))
-      .catch((err) => console.error(err));
+    // Lấy tất cả người dùng và lọc theo role là "Therapist"
+    axios.get("/api/users")
+      .then((res) => {
+        const filteredTherapists = res.data.filter(user => user.roleName === "Therapist");
+        setTherapists(filteredTherapists);
+      })
+      .catch((err) => console.error("Error fetching therapists:", err));
   }, []);
 
+  // Hàm xóa therapist
   const handleDelete = (id) => {
-    axios.delete(`/api/skin-therapists/${id}`)
+    axios.delete(`/api/users/${id}`)
       .then(() => setTherapists(therapists.filter(therapist => therapist._id !== id)))
-      .catch(err => console.error(err));
+      .catch((err) => console.error("Error deleting therapist:", err));
   };
 
+  // Hàm cập nhật thông tin therapist
   const handleUpdate = (therapist) => {
     const newName = prompt("Nhập tên mới:", therapist.name);
     const newEmail = prompt("Nhập email mới:", therapist.email);
     const newPhone = prompt("Nhập số điện thoại mới:", therapist.phone);
 
     if (newName && newEmail && newPhone) {
-      axios.put(`/api/skin-therapists/${therapist._id}`, {
+      axios.put(`/api/users/${therapist._id}`, {
         name: newName,
         email: newEmail,
         phone: newPhone,
-      }).then((res) => {
+      })
+      .then((res) => {
         setTherapists(therapists.map((t) => (t._id === therapist._id ? res.data : t)));
-      }).catch((err) => console.error(err));
+      })
+      .catch((err) => console.error("Error updating therapist:", err));
     }
   };
 
+  // Hàm thêm therapist mới
   const handleAdd = () => {
     if (newTherapist.username && newTherapist.name && newTherapist.email && newTherapist.phone) {
-      axios.post("/api/skin-therapists", newTherapist)
+      axios.post("/api/users", newTherapist)
         .then((res) => {
           setTherapists([...therapists, res.data]);
           setNewTherapist({ username: "", name: "", email: "", phone: "" });
-          setIsAddModalOpen(false); // Close the modal after adding
+          setIsAddModalOpen(false); // Đóng modal sau khi thêm
         })
-        .catch((err) => console.error(err));
+        .catch((err) => console.error("Error adding therapist:", err));
     } else {
       alert("Vui lòng nhập đầy đủ thông tin!");
     }

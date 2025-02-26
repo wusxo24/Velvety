@@ -12,8 +12,6 @@ exports.createBookingRequest = async (req, res) => {
 exports.getAllBookingRequests = async (req, res) => {
   try {
     const bookingRequests = await BookingRequest.find()
-      .populate('serviceId')
-      .populate('therapistId');
     res.status(200).json(bookingRequests);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -22,7 +20,7 @@ exports.getAllBookingRequests = async (req, res) => {
 
 exports.assignConsultant = async (req, res) => {
   try {
-    const { therapistId } = req.body;
+    const { consultantId } = req.body;
     const bookingRequest = await BookingRequest.findByIdAndUpdate(
       req.params.id,
       { consultantId },

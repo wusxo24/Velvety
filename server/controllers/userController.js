@@ -4,12 +4,14 @@ const bcrypt = require('bcryptjs');
 // Get all users (Admin only)
 exports.getAllUsers = async (req, res) => {
     try {
-        const users = await User.find().select('-password');
-        res.json(users);
+        const roles = ["Therapist","Manager","Admin","Customer","Staff"]; // thêm các role khác nếu cần
+        const therapists = await User.find({ roleName: { $in: roles } }).select('-password');
+        res.json(therapists);
     } catch (error) {
-        res.status(500).json({ message: "Error fetching users", error });
+        res.status(500).json({ message: "Error fetching therapists", error });
     }
 };
+
 
 // Get user by ID
 exports.getUserById = async (req, res) => {

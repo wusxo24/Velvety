@@ -21,7 +21,7 @@ export default function StaffManagement() {
   // Lấy danh sách nhân viên từ API
   useEffect(() => {
     axios
-      .get("/api/staff")
+      .get("/api/users")
       .then((res) => setStaffMembers(res.data))
       .catch((err) => console.error(err));
   }, []);
@@ -29,7 +29,7 @@ export default function StaffManagement() {
   // Xóa nhân viên
   const handleDelete = (id) => {
     axios
-      .delete(`/api/staff/${id}`)
+      .delete(`/api/users/${id}`)
       .then(() => setStaffMembers(staffMembers.filter(staff => staff._id !== id)))
       .catch(err => console.error(err));
   };
@@ -44,7 +44,7 @@ export default function StaffManagement() {
 
     if (newFirstName && newLastName && newEmail && newPhoneNumber && newRoleName) {
       axios
-        .put(`/api/staff/${staff._id}`, {
+        .put(`/api/users/${staff._id}`, {
           firstName: newFirstName,
           lastName: newLastName,
           email: newEmail,
@@ -65,7 +65,7 @@ export default function StaffManagement() {
   // Thêm nhân viên mới
   const handleAdd = () => {
     axios
-      .post("/api/staff", newStaff)
+      .post("/api/users", newStaff)
       .then((res) => {
         setStaffMembers([...staffMembers, res.data]);
         setNewStaff({
