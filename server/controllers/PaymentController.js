@@ -55,8 +55,8 @@ const createEmbeddedPaymentLink = async (req, res) => {
         const amount = service.price;
         const description = "Thanh toan dich vu";
         const items = [{ name: service.name, quantity: 1, price: service.price }];
-        const returnUrl = process.env.RETURN_URL || "http://localhost:3000"; // Define the URL for the return page
-        const cancelUrl = process.env.CANCEL_URL || "http://localhost:3000/cancel"; // Define the URL for the cancel page
+        const returnUrl = "http://localhost:5000/pay-success"; // URL cho trang thành công
+        const cancelUrl = "http://localhost:5000/pay-failed"; // URL cho trang thất bại
 
         // Create the payment link using PayOS
         try {

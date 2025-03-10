@@ -32,6 +32,8 @@ import CustomerProfile from "./pages/customer/CustomerProfile.jsx";
 import SkincareBooking from "./pages/customer/Calendar.jsx";
 import ViewBooked from "./pages/consultant/ViewBooked";
 import ViewBookingHistory from "./pages/customer/BookingHistory.jsx";
+import { PaySuccess } from "./pages/customer/PaySuccess";
+import { PayFailed } from "./pages/customer/PayFailed";
 
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
@@ -87,6 +89,8 @@ function App() {
           <Route path="/services/:id/consultant-customer/:idConsultant/calendar" element={<SkincareBooking />} />
           <Route path="/customer-profile" element={<CustomerProfile />} />
           <Route path="/booking-history" element={<ViewBookingHistory />} />
+          <Route path="/pay-success" element={<PaySuccess />} />
+          <Route path="/pay-failed" element={<PayFailed />} />
         </Route>
 
         {/* Manager Pages */}
