@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../utils/axiosInstance";
 import StaffSidebar from "../../components/StaffSidebar";
+import { toast, ToastContainer } from "react-toastify";
 
 const ViewBooking = () => {
   const [bookings, setBookings] = useState([]);
@@ -27,16 +28,28 @@ const ViewBooking = () => {
   }, []);
 
 
-  const handlePaymentClick = async (bookingId, serviceId) => {
+  const handlePaymentClick = async (bookingId) => {
     try {
-      const response = await axios.post(`/api/payments/create-payment/${serviceId}`, { bookingId });
-      // Assuming the response contains a URL for the payment
-      window.location.href = response.data.paymentUrl; // Redirect the user to the payment page
+      const response = await axios.post(`/api/payments/create-payment/${bookingId}`);
+      const checkoutUrl = response?.data?.data?.checkoutUrl; // Correct path
+      const orderCode = response?.data?.data?.orderCode; // Check if orderCode exists
+  
+      if (!checkoutUrl) {
+        throw new Error("checkoutUrl is missing from API response");
+      }
+  
+      localStorage.setItem("orderCode", orderCode) && sessionStorage.setItem("orderCode", orderCode);
+      localStorage.setItem("bookingId", bookingId) && sessionStorage.setItem("bookingId", bookingId);
+      window.location.href = checkoutUrl;
+      toast.success(`Successfully created payment link`);
     } catch (err) {
+      console.error("Payment API Error:", err);
       setError(err.response?.data?.message || "Failed to create payment link");
+      toast.error("Failed to create payment link. Please try again.");
     }
   };
-
+  
+  
 
   const handleConsultantClick = async (consultantID, bookingID) => {
     if (!bookingID) {
@@ -117,6 +130,7 @@ const ViewBooking = () => {
     <div className="flex">
       <StaffSidebar />
       <div className="p-4 w-full">
+      <ToastContainer/>
         <h1 className="text-2xl font-bold mb-4">View Bookings</h1>
         {loading && <p>Loading...</p>}
         {error && <p className="text-red-500">{error}</p>}
@@ -164,7 +178,7 @@ const ViewBooking = () => {
                 </td>
                 <td className="border p-2 text-center">
                   <button
-                    onClick={() => handlePaymentClick(booking._id, booking.serviceID?._id)}
+                    onClick={() => handlePaymentClick(booking._id)}
                     className="bg-blue-500 text-white p-2 rounded hover:bg-blue-700"
                   >
                     Use Payment

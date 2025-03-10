@@ -4,10 +4,14 @@ const axios = require('axios');
 
 (async function() {
     try {
-        const url = await ngrok.connect(3000); // Adjust port if needed
+        const url = await ngrok.connect(5000); // Ensure this matches your server port
         console.log(`Ngrok tunnel started: ${url}`);
 
-        // Automatically update the PayOS webhook
+        // Wait a few seconds to ensure the server is ready
+        await new Promise(resolve => setTimeout(resolve, 5000));  
+
+        console.log(`Updating webhook with: ${url}/api/payments/receive-hook`);
+
         const response = await axios.post('https://api-merchant.payos.vn/confirm-webhook', {
             webhookUrl: `${url}/api/payments/receive-hook`
         }, {

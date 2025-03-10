@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const paymentRoutes = require("./routes/PaymentRoutes");
 
 dotenv.config();
 
@@ -27,8 +26,6 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
-app.use("/api/payments", paymentRoutes);
-
 
 // Import Routes
 const routes = require('./routes'); // Import the routes

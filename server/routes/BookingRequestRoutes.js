@@ -8,7 +8,12 @@ const {
   getConsultantBookings,
   getCustomerBookings,
   cancelBookingRequest,
-  updateBookingRequest
+  updateBookingRequest,
+  confirmBooking,
+  completeBooking,
+  cancelBooking,
+  getBookingById,
+  updateBookingStatus
 } = require('../controllers/BookingRequestController');
 const { authenticate, authorize } = require("../middlewares/AuthMiddleware");
 
@@ -23,6 +28,13 @@ router.get("/my-bookings",authenticate, authorize(["Consultant"]),getConsultantB
 router.get("/history-bookings",authenticate, authorize(["Customer"]),getCustomerBookings);
 router.put("/:id/cancel", authenticate, authorize(["Customer"]), cancelBookingRequest);
 router.put("/:id", authenticate, authorize(["Staff"]), updateBookingRequest);
+router.put("/:id/confirm", authenticate, authorize(["Staff"]), confirmBooking);
+router.put("/:id/complete", authenticate, authorize(["Staff"]), completeBooking);
+router.put("/:id/cancel", authenticate, authorize(["Customer", "Staff"]), cancelBooking);
+router.get("/:id", authenticate, getBookingById);
+router.post('/update-status', updateBookingStatus);
+
+
 
 
 

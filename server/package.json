@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "axios": "^1.7.9",
+    "@payos/node": "^1.0.10",
+    "axios": "^1.8.1",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -12,6 +13,7 @@
     "jwt-decode": "^4.0.0",
     "mongodb": "^6.12.0",
     "mongoose": "^8.10.0",
+    "ngrok": "^5.0.0-beta.2",
     "nodemailer": "^6.10.0",
     "react-hook-form": "^7.54.2"
   },
@@ -19,7 +21,10 @@
     "nodemon": "^3.1.9"
   },
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "node index.js",
+    "dev": "nodemon index.js",
+    "ngrok": "node start-ngrok.js",
+    "start": "concurrently \"npm run dev\" \"npm run ngrok\""
   }
 }
