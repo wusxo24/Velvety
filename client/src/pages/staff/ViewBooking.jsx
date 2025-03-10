@@ -26,6 +26,18 @@ const ViewBooking = () => {
     fetchBookings();
   }, []);
 
+
+  const handlePaymentClick = async (bookingId, serviceId) => {
+    try {
+      const response = await axios.post(`/api/payments/create-payment/${serviceId}`, { bookingId });
+      // Assuming the response contains a URL for the payment
+      window.location.href = response.data.paymentUrl; // Redirect the user to the payment page
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to create payment link");
+    }
+  };
+
+
   const handleConsultantClick = async (consultantID, bookingID) => {
     if (!bookingID) {
       console.error("Invalid booking ID:", bookingID);
@@ -99,8 +111,8 @@ const ViewBooking = () => {
       setError(err.message);
     }
   };
-    
-  
+
+
   return (
     <div className="flex">
       <StaffSidebar />
@@ -117,6 +129,7 @@ const ViewBooking = () => {
               <th className="border p-2 text-center">Consultant</th>
               <th className="border p-2 text-center">Status</th>
               <th className="border p-2 text-center">Actions</th>
+              <th className="border p-2 text-center">Payment</th>
             </tr>
           </thead>
           <tbody>
@@ -149,6 +162,15 @@ const ViewBooking = () => {
                     <option value="Cancelled">Cancelled</option>
                   </select>
                 </td>
+                <td className="border p-2 text-center">
+                  <button
+                    onClick={() => handlePaymentClick(booking._id, booking.serviceID?._id)}
+                    className="bg-blue-500 text-white p-2 rounded hover:bg-blue-700"
+                  >
+                    Use Payment
+                  </button>
+                </td>
+
               </tr>
             ))}
           </tbody>
